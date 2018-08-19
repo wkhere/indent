@@ -1,0 +1,4 @@
+k1: v1
+k2:
+  sub1: k2v1
+  sub2: atomic

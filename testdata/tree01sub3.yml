@@ -1,0 +1,7 @@
+k1: v1
+k2:
+  sub1: k2v1
+  sub2:
+    deep1: 111
+    deep2: k2s2v2
+    deep3: 54

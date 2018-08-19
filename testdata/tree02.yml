@@ -1,0 +1,5 @@
+test:
+  anchor: *my-precious
+  tree: foo
+
+main: zzz
