@@ -3,6 +3,20 @@
 This Go library gives you an `indent.Reader` which will prepend each line
 of underlying input with configured indentation.
 
+### API
+
+You create the reader as the doc says:
+```
+% go doc indent.NewReader
+package indent // import "github.com/wkhere/indent"
+
+func NewReader(r io.Reader, indent string) *Reader
+    NewReader returns a Reader which will prepend each line read from underlying
+    reader with given indentation.
+```
+
+then you use it as any other `io.Reader`.
+
 ### example
 
 This shows an example of `indent` usefulness.
