@@ -1,11 +1,12 @@
-package indentr
+package indent
 
 import (
 	"bufio"
 	"io"
 )
 
-type IndentR struct {
+// Reader implements prepending each line with indentation.
+type Reader struct {
 	indent      []byte
 	llr         *bufio.Reader
 	head, data  []byte
@@ -13,9 +14,11 @@ type IndentR struct {
 	err         error
 }
 
-func NewIndentR(r io.Reader, spaces string) *IndentR {
-	return &IndentR{
-		indent:      []byte(spaces),
+// NewReader returns a Reader which will prepend each line read from
+// underlying reader with given indentation.
+func NewReader(r io.Reader, indent string) *Reader {
+	return &Reader{
+		indent:      []byte(indent),
 		llr:         bufio.NewReader(r),
 		startIndent: true,
 	}
@@ -25,7 +28,7 @@ func NewIndentR(r io.Reader, spaces string) *IndentR {
 // It may return (0, nil) in the middle of processing, then the subsequent
 // call will read more data.
 // At EOF the count may be > 0.
-func (r *IndentR) Read(p []byte) (n int, err error) {
+func (r *Reader) Read(p []byte) (n int, err error) {
 
 	// First, return saved indent, or its chunk if p is smaller.
 	if len(r.head) > 0 {

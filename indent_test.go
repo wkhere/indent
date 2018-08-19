@@ -1,4 +1,4 @@
-package indentr
+package indent
 
 import (
 	"bytes"
@@ -31,7 +31,7 @@ func TestIR(t *testing.T) {
 	for i, tc := range tabIR {
 		b := bytes.NewBufferString(tc.input)
 		b2 := bytes.NewBuffer(nil)
-		r := NewIndentR(b, "XX")
+		r := NewReader(b, "XX")
 		io.Copy(b2, r)
 		have := b2.String()
 		if have != tc.want {
@@ -47,7 +47,7 @@ func TestIRSmallBuffer(t *testing.T) {
 	for i, tc := range tabIR {
 		b := bytes.NewBufferString(tc.input)
 		b2 := bytes.NewBuffer(nil)
-		r := NewIndentR(b, "XX")
+		r := NewReader(b, "XX")
 
 		for {
 			n, err := r.Read(p)
@@ -97,7 +97,7 @@ func BenchmarkIRBasic(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		for _, tc := range tabIR {
 			b := bytes.NewBufferString(tc.input)
-			r := NewIndentR(b, "XX")
+			r := NewReader(b, "XX")
 			io.Copy(ioutil.Discard, r)
 		}
 	}
@@ -168,7 +168,7 @@ func readIRFile(fn string) error {
 	}
 	defer f.Close()
 
-	r := NewIndentR(f, "  ")
+	r := NewReader(f, "  ")
 	_, err = io.Copy(ioutil.Discard, r)
 	return err
 }
