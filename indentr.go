@@ -21,6 +21,10 @@ func NewIndentR(r io.Reader, spaces string) *IndentR {
 	}
 }
 
+// Read reads data into p, prepending each line with indentation.
+// It may return (0, nil) in the middle of processing, then the subsequent
+// call will read more data.
+// At EOF the count may be > 0.
 func (r *IndentR) Read(p []byte) (n int, err error) {
 
 	// First, return saved indent, or its chunk if p is smaller.
