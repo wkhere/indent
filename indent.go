@@ -7,7 +7,7 @@ import (
 
 // Reader implements prepending each line with indentation.
 type Reader struct {
-	indent      []byte
+	indentb     []byte
 	llr         *bufio.Reader
 	head, data  []byte
 	startIndent bool
@@ -18,7 +18,7 @@ type Reader struct {
 // underlying reader with given indentation.
 func NewReader(r io.Reader, indent string) *Reader {
 	return &Reader{
-		indent:      []byte(indent),
+		indentb:     []byte(indent),
 		llr:         bufio.NewReader(r),
 		startIndent: true,
 	}
@@ -59,7 +59,7 @@ func (r *Reader) Read(p []byte) (n int, err error) {
 	// Some data read. If we were at the beginning of the line,
 	// set new indent to be filled before data.
 	if r.startIndent {
-		r.head = r.indent
+		r.head = r.indentb
 		r.startIndent = false
 	}
 
