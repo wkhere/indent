@@ -32,7 +32,12 @@ func TestIR(t *testing.T) {
 		b := bytes.NewBufferString(tc.input)
 		b2 := bytes.NewBuffer(nil)
 		r := NewReader(b, "XX")
-		io.Copy(b2, r)
+		_, err := io.Copy(b2, r)
+
+		if err != nil {
+			t.Errorf("tc[%d] unexpected error: %s", i, err)
+		}
+
 		have := b2.String()
 		if have != tc.want {
 			t.Errorf("tc[%d] mismatch\nhave: %q\nwant: %q", i, have, tc.want)
@@ -49,12 +54,18 @@ func TestIRSmallBuffer(t *testing.T) {
 		b2 := bytes.NewBuffer(nil)
 		r := NewReader(b, "XX")
 
+		var err error
 		for {
-			n, err := r.Read(p)
+			var n int
+			n, err = r.Read(p)
 			b2.Write(p[:n])
 			if err != nil {
 				break
 			}
+		}
+
+		if err != nil && err != io.EOF {
+			t.Errorf("tc[%d] unexpected error: %s", i, err)
 		}
 
 		have := b2.String()
