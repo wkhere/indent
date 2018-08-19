@@ -1,5 +1,10 @@
 ## indent
 
+[![Build Status](https://travis-ci.org/wkhere/indent.svg?branch=master)](https://travis-ci.org/wkhere/indent)
+[![Coverage Status](https://coveralls.io/repos/github/wkhere/indent/badge.svg?branch=master)](https://coveralls.io/github/wkhere/indent?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/wkhere/indent)](https://goreportcard.com/report/github.com/wkhere/indent)
+
+
 This Go library gives you an `indent.Reader` which will prepend each line
 of underlying input with configured indentation.
 
