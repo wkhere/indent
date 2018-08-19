@@ -6,16 +6,18 @@ import (
 )
 
 type IndentR struct {
-	indent     []byte
-	llr        *bufio.Reader
-	head, data []byte
-	err        error
+	indent      []byte
+	llr         *bufio.Reader
+	head, data  []byte
+	startIndent bool
+	err         error
 }
 
 func NewIndentR(r io.Reader, spaces string) *IndentR {
 	return &IndentR{
-		indent: []byte(spaces),
-		llr:    bufio.NewReader(r),
+		indent:      []byte(spaces),
+		llr:         bufio.NewReader(r),
+		startIndent: true,
 	}
 }
 
@@ -39,20 +41,34 @@ func (r *IndentR) Read(p []byte) (n int, err error) {
 	}
 
 	// Now the previous indent and line are flushed.
-	// Let's read the next line.
-	r.data, r.err = r.llr.ReadBytes('\n')
+	// Let's read the next line or at least part of it.
+	r.data, r.err = r.llr.ReadSlice('\n')
 
 	// No data read, end this.
 	if len(r.data) == 0 {
 		return 0, r.err
 	}
 
-	// Data read. It's either line ending with LF,
-	// or a data at the EOF without LF.
-	// In both cases we want to indent it.
-	r.head = r.indent
+	// Some data read. If we were at the beginning of the line,
+	// set new indent to be filled before data.
+	if r.startIndent {
+		r.head = r.indent
+		r.startIndent = false
+	}
 
-	// Any error is copied to r.err and first we should
+	switch r.err {
+	case nil:
+		// Data contains full line, so after flushing it,
+		// new indent should occur. Mark this for future calls.
+		r.startIndent = true
+
+	case bufio.ErrBufferFull:
+		// Data doesn't have full line but we can ignore this,
+		// more data will be read in future calls.
+		r.err = nil
+	}
+
+	// Any other error is copied to r.err and first we should
 	// start returning data alread gathered in r.head/r.line.
 	// It can be done in future calls, now we can safely
 	// return 0, nil.
