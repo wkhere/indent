@@ -14,16 +14,17 @@ func init() {
 
 var tabIR = []struct {
 	input, want string
+	nwant       int64
 }{
-	{"", ""},
-	{"\n", "XX\n"},
-	{"x", "XXx"},
-	{"x\n", "XXx\n"},
-	{"\nx", "XX\nXXx"},
-	{"\n\n\n", "XX\nXX\nXX\n"},
-	{"\taa\n", "XX\taa\n"},
-	{"a:\n  b: 42\n", "XXa:\nXX  b: 42\n"},
-	{"a:\n  b: 42", "XXa:\nXX  b: 42"},
+	{"", "", 0},
+	{"\n", "XX\n", 3},
+	{"x", "XXx", 3},
+	{"x\n", "XXx\n", 4},
+	{"\nx", "XX\nXXx", 6},
+	{"\n\n\n", "XX\nXX\nXX\n", 9},
+	{"\taa\n", "XX\taa\n", 6},
+	{"a:\n  b: 42\n", "XXa:\nXX  b: 42\n", 15},
+	{"a:\n  b: 42", "XXa:\nXX  b: 42", 14},
 }
 
 func TestIR(t *testing.T) {
@@ -32,7 +33,7 @@ func TestIR(t *testing.T) {
 		b := bytes.NewBufferString(tc.input)
 		b2 := bytes.NewBuffer(nil)
 		r := NewReader(b, "XX")
-		_, err := io.Copy(b2, r)
+		n, err := io.Copy(b2, r)
 
 		if err != nil {
 			t.Errorf("tc[%d] unexpected error: %s", i, err)
@@ -41,6 +42,9 @@ func TestIR(t *testing.T) {
 		have := b2.String()
 		if have != tc.want {
 			t.Errorf("tc[%d] mismatch\nhave: %q\nwant: %q", i, have, tc.want)
+		}
+		if n != tc.nwant {
+			t.Errorf("tc[%d] n mismatch\nhave: %d, want: %d", i, n, tc.nwant)
 		}
 	}
 }
