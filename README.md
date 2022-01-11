@@ -38,14 +38,16 @@ import (
 )
 
 func main() {
-	b := bytes.NewBufferString(`
-hey: I am yaml
-key: val
-    nested: something`)
-
+	b := bytes.NewBufferString(example)
 	io.Copy(os.Stdout, bytes.NewBufferString("new_root:\n"))
 	io.Copy(os.Stdout, indent.NewReader(b, "    "))
 }
+
+const example = `
+hey: I am yaml
+key: val
+	nested: something
+`
 ```
 
 produces the output:
