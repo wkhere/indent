@@ -1,6 +1,6 @@
 ## indent
 
-[![Build Status](https://travis-ci.org/wkhere/indent.svg?branch=master)](https://travis-ci.org/wkhere/indent)
+[![Build Status](https://github.com/wkhere/indent/workflows/Go/badge.svg?branch=master)](https://github.com/wkhere/indent/actions/workflows/go.yml)
 [![Coverage Status](https://coveralls.io/repos/github/wkhere/indent/badge.svg?branch=master)](https://coveralls.io/github/wkhere/indent?branch=master)
 
 
