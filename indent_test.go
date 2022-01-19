@@ -58,12 +58,14 @@ func TestIRSmallBuffer(t *testing.T) {
 		b := bytes.NewBufferString(tc.input)
 		b2 := bytes.NewBuffer(nil)
 		r := NewReader(b, "XX")
+		var n int64
 
 		var err error
 		for {
-			var n int
-			n, err = r.Read(p)
-			b2.Write(p[:n])
+			var n1 int
+			n1, err = r.Read(p)
+			b2.Write(p[:n1])
+			n += int64(n1)
 			if err != nil {
 				break
 			}
@@ -76,6 +78,9 @@ func TestIRSmallBuffer(t *testing.T) {
 		have := b2.String()
 		if have != tc.want {
 			t.Errorf("tc[%d] mismatch\nhave: %q\nwant: %q", i, have, tc.want)
+		}
+		if n != tc.nwant {
+			t.Errorf("tc[%d] n mismatch\nhave: %d, want: %d", i, n, tc.nwant)
 		}
 	}
 }
