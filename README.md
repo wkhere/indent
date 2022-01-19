@@ -1,7 +1,7 @@
 ## indent
 
 [![Build Status](https://github.com/wkhere/indent/workflows/Go/badge.svg?branch=master)](https://github.com/wkhere/indent/actions/workflows/go.yml)
-[![Coverage Status](https://coveralls.io/repos/github/wkhere/indent/badge.svg?branch=master)](https://coveralls.io/github/wkhere/indent?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/wkhere/indent/badge.svg?branch=master&kill_cache=1)](https://coveralls.io/github/wkhere/indent?branch=master)
 
 
 This Go library gives you an `indent.Reader` which will prepend each line
