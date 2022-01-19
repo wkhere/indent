@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
-	"testing/iotest"
 )
 
 func init() {
@@ -51,12 +50,26 @@ func TestIR(t *testing.T) {
 }
 
 func TestIRSmallBuffer(t *testing.T) {
+	// todo: use testing/iotest.OneByteReader
+
+	p := make([]byte, 1)
 
 	for i, tc := range tabIR {
 		b := bytes.NewBufferString(tc.input)
 		b2 := bytes.NewBuffer(nil)
-		r := NewReader(iotest.OneByteReader(b), "XX")
-		n, err := io.Copy(b2, r)
+		r := NewReader(b, "XX")
+		var n int64
+
+		var err error
+		for {
+			var n1 int
+			n1, err = r.Read(p)
+			b2.Write(p[:n1])
+			n += int64(n1)
+			if err != nil {
+				break
+			}
+		}
 
 		if err != nil && err != io.EOF {
 			t.Errorf("tc[%d] unexpected error: %s", i, err)
