@@ -50,7 +50,7 @@ func TestIR(t *testing.T) {
 }
 
 func TestIRSmallBuffer(t *testing.T) {
-	
+
 	p := make([]byte, 1)
 
 	for i, tc := range tabIR {
