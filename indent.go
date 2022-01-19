@@ -43,7 +43,9 @@ func (r *Reader) Read(p []byte) (n int, err error) {
 	if len(r.data) > 0 {
 		n = copy(p, r.data)
 		r.data = r.data[n:]
-		err = errorIfFlushed(len(r.data), r.err)
+		if len(r.data) == 0 {
+			err = r.err
+		}
 		return
 	}
 
@@ -80,11 +82,4 @@ func (r *Reader) Read(p []byte) (n int, err error) {
 	// It can be done in future calls, now we can safely
 	// return 0, nil.
 	return
-}
-
-func errorIfFlushed(l int, err error) error {
-	if l > 0 {
-		return nil
-	}
-	return err
 }
