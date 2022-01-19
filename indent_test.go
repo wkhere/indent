@@ -57,8 +57,8 @@ func TestIRSmallBuffer(t *testing.T) {
 		b := bytes.NewBufferString(tc.input)
 		b2 := bytes.NewBuffer(nil)
 		r := NewReader(b, "XX")
-		var n int64
 
+		var n int64
 		var err error
 		for {
 			var n1 int
