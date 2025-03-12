@@ -1,1 +1,2 @@
 - fuzz tests
+- fix membug on big data (/dev/zero anyone?)
