@@ -1,6 +1,8 @@
-go:
-	go vet
+build:
 	go test -cover
+	go build
+
+install: build
 	go install
 
 cover:
@@ -10,4 +12,4 @@ cover:
 bench:
 	go test -bench=. -benchmem
 
-.PHONY: go cover bench
+.PHONY: build install cover bench
