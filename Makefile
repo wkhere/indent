@@ -1,9 +1,9 @@
 build:
 	go test -cover
-	go build
+	go build ./cmd/indent
 
 install: build
-	go install
+	go install ./cmd/indent
 
 cover:
 	go test -coverprofile=cov
