@@ -5,6 +5,8 @@ import (
 	"io"
 )
 
+const maxEolAttempts = 4
+
 // Reader implements prepending each line with indentation.
 type Reader struct {
 	indentb     []byte
@@ -12,6 +14,7 @@ type Reader struct {
 	head, data  []byte
 	startIndent bool
 	err         error
+	eolAttempts int
 }
 
 // NewReader returns a Reader which will prepend each line read from
@@ -70,11 +73,17 @@ func (r *Reader) Read(p []byte) (n int, err error) {
 		// Data contains full line, so after flushing it,
 		// new indent should occur. Mark this for future calls.
 		r.startIndent = true
+		r.eolAttempts = 0
 
 	case bufio.ErrBufferFull:
-		// Data doesn't have full line but we can ignore this,
-		// more data will be read in future calls.
-		r.err = nil
+		r.eolAttempts++
+		if r.eolAttempts <= maxEolAttempts {
+			// Data doesn't have full line but we can ignore this,
+			// more data will be read in future calls.
+			r.err = nil
+		} else {
+			return len(r.data), r.err
+		}
 	}
 
 	// Any other error is copied to r.err and first we should
