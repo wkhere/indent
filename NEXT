@@ -1,1 +1,2 @@
 - fuzz tests
+- limit attempts to reach eol (processing /dev/zero makes cpu busy)
