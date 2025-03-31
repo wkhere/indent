@@ -12,7 +12,7 @@ func init() {
 	os.Chdir("testdata")
 }
 
-var tabIR = []struct {
+var tcBasic = []struct {
 	input, want string
 	nwant       int64
 }{
@@ -27,9 +27,9 @@ var tabIR = []struct {
 	{"a:\n  b: 42", "XXa:\nXX  b: 42", 14},
 }
 
-func TestIR(t *testing.T) {
+func TestBasic(t *testing.T) {
 
-	for i, tc := range tabIR {
+	for i, tc := range tcBasic {
 		b := bytes.NewBufferString(tc.input)
 		b2 := bytes.NewBuffer(nil)
 		r := NewReader(b, "XX")
@@ -49,11 +49,11 @@ func TestIR(t *testing.T) {
 	}
 }
 
-func TestIRSmallBuffer(t *testing.T) {
+func TestSmallBuffer(t *testing.T) {
 
 	p := make([]byte, 1)
 
-	for i, tc := range tabIR {
+	for i, tc := range tcBasic {
 		b := bytes.NewBufferString(tc.input)
 		b2 := bytes.NewBuffer(nil)
 		r := NewReader(b, "XX")
@@ -84,7 +84,7 @@ func TestIRSmallBuffer(t *testing.T) {
 	}
 }
 
-func TestIRFiles(t *testing.T) {
+func TestFiles(t *testing.T) {
 	files := []string{
 		"tree01.yml",
 		"tree01sub1.yml",
@@ -106,16 +106,16 @@ func TestIRFiles(t *testing.T) {
 		"badbin16k+1",
 	}
 	for i, fn := range files {
-		err := readIRFile(fn)
+		err := readAndDiscardFile(fn)
 		if err != nil {
 			t.Errorf("tc[%d] error: %s", i, err)
 		}
 	}
 }
 
-func BenchmarkIRBasic(b *testing.B) {
+func BenchmarkBasic(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		for _, tc := range tabIR {
+		for _, tc := range tcBasic {
 			b := bytes.NewBufferString(tc.input)
 			r := NewReader(b, "XX")
 			io.Copy(ioutil.Discard, r)
@@ -123,7 +123,7 @@ func BenchmarkIRBasic(b *testing.B) {
 	}
 }
 
-func BenchmarkIRFiles(b *testing.B) {
+func BenchmarkFiles(b *testing.B) {
 	files := []string{
 		"tree01.yml",
 		"tree01sub1.yml",
@@ -138,12 +138,12 @@ func BenchmarkIRFiles(b *testing.B) {
 	}
 	for n := 0; n < b.N; n++ {
 		for _, fn := range files {
-			readIRFile(fn)
+			readAndDiscardFile(fn)
 		}
 	}
 }
 
-func BenchmarkIRBig(b *testing.B) {
+func BenchmarkBig(b *testing.B) {
 	files := []string{
 		"big4k+1.yml",
 		"big8k+1.yml",
@@ -151,24 +151,24 @@ func BenchmarkIRBig(b *testing.B) {
 	}
 	for n := 0; n < b.N; n++ {
 		for _, fn := range files {
-			readIRFile(fn)
+			readAndDiscardFile(fn)
 		}
 	}
 }
 
-func BenchmarkIRBad(b *testing.B) {
+func BenchmarkBad(b *testing.B) {
 	files := []string{
 		"badbin01",
 		"badbin1k",
 	}
 	for n := 0; n < b.N; n++ {
 		for _, fn := range files {
-			readIRFile(fn)
+			readAndDiscardFile(fn)
 		}
 	}
 }
 
-func BenchmarkIRBadBig(b *testing.B) {
+func BenchmarkBadBig(b *testing.B) {
 	files := []string{
 		"badbin4k+1",
 		"badbin8k+1",
@@ -176,12 +176,12 @@ func BenchmarkIRBadBig(b *testing.B) {
 	}
 	for n := 0; n < b.N; n++ {
 		for _, fn := range files {
-			readIRFile(fn)
+			readAndDiscardFile(fn)
 		}
 	}
 }
 
-func readIRFile(fn string) error {
+func readAndDiscardFile(fn string) error {
 	f, err := os.Open(fn)
 	if err != nil {
 		panic(err)
