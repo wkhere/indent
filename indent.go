@@ -28,9 +28,7 @@ func NewReader(r io.Reader, indent string) *Reader {
 }
 
 // Read reads data into p, prepending each line with indentation.
-// It may return (0, nil) in the middle of processing, then the subsequent
-// call will read more data.
-// At EOF the count may be > 0.
+// When err != nil (including EOF), n is usually > 0.
 func (r *Reader) Read(p []byte) (n int, err error) {
 
 head:
