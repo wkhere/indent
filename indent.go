@@ -87,7 +87,7 @@ func (r *Reader) Read(p []byte) (n int, err error) {
 	}
 
 	// Any other error is copied to r.err and first we should
-	// start returning data alread gathered in r.head/r.line.
+	// start returning data alread gathered in r.head/r.data.
 	// It can be done in future calls, now we can safely
 	// return 0, nil.
 	return
