@@ -62,6 +62,9 @@ func TestSmallBuffer(t *testing.T) {
 		for {
 			var n1 int
 			n1, err = r.Read(p)
+			if n1 == 0 && err == nil {
+				t.Errorf("tc[%d] got 0, nil with nonempty p", i)
+			}
 			b2.Write(p[:n1])
 			n += int64(n1)
 			if err != nil {

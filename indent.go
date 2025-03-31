@@ -33,6 +33,7 @@ func NewReader(r io.Reader, indent string) *Reader {
 // At EOF the count may be > 0.
 func (r *Reader) Read(p []byte) (n int, err error) {
 
+head:
 	// First, return saved indent, or its chunk if p is smaller.
 	if len(r.head) > 0 {
 		n = copy(p, r.head)
@@ -88,7 +89,5 @@ func (r *Reader) Read(p []byte) (n int, err error) {
 
 	// Any other error is copied to r.err and first we should
 	// start returning data alread gathered in r.head/r.data.
-	// It can be done in future calls, now we can safely
-	// return 0, nil.
-	return
+	goto head
 }
