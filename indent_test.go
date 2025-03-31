@@ -1,9 +1,9 @@
 package indent
 
 import (
-	"bytes"
 	"io"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -29,8 +29,8 @@ var tcBasic = []struct {
 func TestBasic(t *testing.T) {
 
 	for i, tc := range tcBasic {
-		b := bytes.NewBufferString(tc.input)
-		b2 := bytes.NewBuffer(nil)
+		b := strings.NewReader(tc.input)
+		b2 := new(strings.Builder)
 		r := NewReader(b, "XX")
 		n, err := io.Copy(b2, r)
 
@@ -53,8 +53,8 @@ func TestSmallBuffer(t *testing.T) {
 	p := make([]byte, 1)
 
 	for i, tc := range tcBasic {
-		b := bytes.NewBufferString(tc.input)
-		b2 := bytes.NewBuffer(nil)
+		b := strings.NewReader(tc.input)
+		b2 := new(strings.Builder)
 		r := NewReader(b, "XX")
 
 		var n int64
@@ -115,7 +115,7 @@ func TestFiles(t *testing.T) {
 func BenchmarkBasic(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		for _, tc := range tcBasic {
-			b := bytes.NewBufferString(tc.input)
+			b := strings.NewReader(tc.input)
 			r := NewReader(b, "XX")
 			io.Copy(io.Discard, r)
 		}
