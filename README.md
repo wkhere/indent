@@ -16,7 +16,7 @@ The program:
 package main
 
 import (
-	"bytes"
+	"strings"
 	"io"
 	"os"
 
@@ -24,8 +24,8 @@ import (
 )
 
 func main() {
-	b := bytes.NewBufferString(example)
-	io.Copy(os.Stdout, bytes.NewBufferString("new_root:\n"))
+	b := strings.NewReader(example)
+	io.Copy(os.Stdout, strings.NewReader("new_root:\n"))
 	io.Copy(os.Stdout, indent.NewReader(b, "    "))
 }
 
