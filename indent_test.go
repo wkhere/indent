@@ -3,7 +3,6 @@ package indent
 import (
 	"bytes"
 	"io"
-	"io/ioutil"
 	"os"
 	"testing"
 )
@@ -118,7 +117,7 @@ func BenchmarkBasic(b *testing.B) {
 		for _, tc := range tcBasic {
 			b := bytes.NewBufferString(tc.input)
 			r := NewReader(b, "XX")
-			io.Copy(ioutil.Discard, r)
+			io.Copy(io.Discard, r)
 		}
 	}
 }
@@ -189,6 +188,6 @@ func readAndDiscardFile(fn string) error {
 	defer f.Close()
 
 	r := NewReader(f, "  ")
-	_, err = io.Copy(ioutil.Discard, r)
+	_, err = io.Copy(io.Discard, r)
 	return err
 }
