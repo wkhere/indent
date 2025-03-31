@@ -9,7 +9,9 @@ cover:
 	go test -coverprofile=cov
 	go tool cover   -html=cov
 
+sel=.
+cnt=6
 bench:
-	go test -bench=. -benchmem
+	go test -bench=$(sel) -count=$(cnt) -benchmem
 
 .PHONY: build install cover bench
