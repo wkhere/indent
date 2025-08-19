@@ -34,7 +34,6 @@ flags:
 
 		default:
 			rest = append(rest, arg)
-			continue
 		}
 	}
 
