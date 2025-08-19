@@ -1,5 +1,6 @@
 - fuzz tests
 - simplify gha
 + limit attempts to reach eol (processing /dev/zero makes cpu busy)
+  - configurable limits
   - limit by max line size
 - error on binary data
